@@ -386,3 +386,25 @@ CRM = {
     }
   ]
 }
+
+h = []
+employees = []
+
+CRM[:companies].each do |company|
+  company_id = company.delete(:id)
+  h << company
+
+  CRM[:people].each do |person|
+    person[:employments].each do |employment|
+      if employment[:company_id] == company_id
+        employment.delete(:company_id)
+        puts employment
+        # puts "   (#{person[:id]}) #{person[:first_name]} #{person[:last_name]} - #{employment[:title]}"
+      end
+
+    end
+  end
+
+end
+
+puts h
