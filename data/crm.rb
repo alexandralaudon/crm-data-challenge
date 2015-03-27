@@ -387,17 +387,47 @@ CRM = {
   ]
 }
 
+#### Challenge #1 - employees of companies
 
-CRM[:companies].each do |company|
-  company_id = company.delete(:id)
-  puts company[:name]
-  CRM[:people].each do |person|
-    person[:employments].each do |employment|
-      if employment[:company_id] == company_id
-        employment.delete(:company_id)
-        puts "    (#{person[:id]}) #{person[:first_name]} #{person[:last_name]} - #{employment[:title]}"
+# CRM[:companies].each do |company|
+#   company_id = company.delete(:id)
+#   puts company[:name]
+#   CRM[:people].each do |person|
+#     person[:employments].each do |employment|
+#       if employment[:company_id] == company_id
+#         employment.delete(:company_id)
+#         puts "    (#{person[:id]}) #{person[:first_name]} #{person[:last_name]} - #{employment[:title]}"
+#       end
+#     end
+#   end
+#
+# end
+
+
+#### Challenge #2 - all employments
+
+    def all_employments(all =[], i=0)
+      CRM[:companies].each do |company|
+        CRM[:people].each do |person|
+          person[:employments].each do |employment|
+            if employment[:company_id] == company[:id]
+              all[i] = {:company_id => company[:id], :company_name => company[:name], :person_id => person[:id], :person_first_name => person[:first_name], :person_last_name => person[:last_name], :title => employment[:title]}
+              i+=1
+            end
+          end
+        end
       end
+      return all
     end
-  end
 
-end
+#### Challenge #3 - people without employments
+    def people_without_employments(i=0, y=[])
+      CRM[:people].each do |person|
+        if person[:employments] == []
+          person.delete(:employments)
+          y[i] = person
+          i+=1
+        end
+      end
+      return y
+    end
